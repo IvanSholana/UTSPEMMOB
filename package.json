@@ -11,6 +11,7 @@
   "dependencies": {
     "@gluestack-style/react": "^1.0.12",
     "@gluestack-ui/themed": "^1.0.11",
+    "@react-native-community/blur": "^4.3.2",
     "@react-native-masked-view/masked-view": "0.2.9",
     "@react-navigation/drawer": "^6.6.6",
     "@react-navigation/native": "^6.1.9",

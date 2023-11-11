@@ -2,14 +2,14 @@ import { Text, View } from "@gluestack-ui/themed";
 import { StyleSheet } from "react-native";
 import IconCard from "./icon-card";
 
-export default function TextCard({ title }) {
+export default function TextCard({ data }) {
   return (
     <View style={styles.textCard}>
       <View style={{ flex: 1 }}>
-        <Text style={styles.theme}>Technology</Text>
+        <Text style={styles.theme}>{data.date}</Text>
       </View>
       <View>
-        <Text style={styles.title}>{title}</Text>
+        <Text style={styles.title}>{data.title}</Text>
       </View>
       <IconCard />
     </View>

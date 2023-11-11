@@ -1,65 +1,72 @@
-import { StyleSheet } from "react-native";
-import NewsCard from "../components/card/news-card";
+import { StyleSheet, ActivityIndicator } from "react-native";
 import { Text, View } from "@gluestack-ui/themed";
-import MiniCard from "../components/mini-card.js/mini-card";
 import { FlatList } from "react-native-gesture-handler";
-import FloatingButton from "../components/floating-button.js/floating-button";
 import { fetchData } from "../data/data-fetching";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { useFocusEffect } from "@react-navigation/native";
-import { useCallback } from "react";
+import NewsCard from "../components/card/news-card";
+import MiniCard from "../components/mini-card.js/mini-card";
 
 export default function HomeScreen({ navigation }) {
   const [quotes, setQuotes] = useState([]);
+  const [isLoading, setLoading] = useState(true);
 
   useFocusEffect(
     useCallback(() => {
       fetchData(
         "https://raw.githubusercontent.com/dauditts/pm-static-api/main/articles.json"
-      ).then((data) => {
-        setQuotes(data.articles);
-      });
+      )
+        .then((data) => {
+          setQuotes(data.articles);
+        })
+        .catch((error) => console.error("Error fetching data: ", error))
+        .finally(() => setLoading(false));
     }, [])
   );
 
-  function ReadNews(data) {
+  function readNews(data) {
     navigation.push("readNews", { dataNews: data });
   }
-  var nilaiRandom = Math.floor(Math.random() * (quotes.length - 0 + 1)) + 0;
+
+  if (isLoading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="blue" />
+      </View>
+    );
+  }
+  const randomIndex = Math.floor(Math.random() * (quotes.length - 1)) + 1;
 
   return (
     <>
-      <View style={style.suggestionNews}>
-        <NewsCard readNews={ReadNews} dataNews={quotes[nilaiRandom]} />
+      <View style={styles.suggestionNews}>
+        <NewsCard readNews={readNews} dataNews={quotes[randomIndex]} />
       </View>
-      <View style={style.allNews}>
-        <Text
-          size="lg"
-          bold
-          style={{ marginHorizontal: 32, marginTop: 30, marginBottom: 10 }}
-        >
+      <View style={styles.allNews}>
+        <Text size="lg" bold style={styles.newsHeaderText}>
           All News
         </Text>
         <FlatList
           data={quotes}
           renderItem={({ item }) => (
-            <MiniCard readNews={ReadNews} dataNews={item} />
+            <MiniCard readNews={readNews} dataNews={item} />
           )}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item) => String(item.id)}
         />
-      </View>
-      <View style={style.floatingbutton}>
-        <FloatingButton />
       </View>
     </>
   );
 }
 
-const style = StyleSheet.create({
-  floatingbutton: {
-    position: "absolute",
-    bottom: 20,
-    width: "100%",
+const styles = StyleSheet.create({
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
     alignItems: "center",
+  },
+  allNews: {
+    marginHorizontal: 32,
+    marginTop: 30,
+    marginBottom: 10,
   },
 });

@@ -9,6 +9,7 @@ import { config } from "@gluestack-ui/config"; // Optional if you want to use de
 import ReadNews from "./screens/read-news-screen";
 import "react-native-gesture-handler";
 import MiniCard from "./components/mini-card.js/mini-card";
+import Biodata from "./screens/boidata";
 
 const Stack = createStackNavigator();
 
@@ -16,10 +17,11 @@ export default function App() {
   return (
     <GluestackUIProvider config={config}>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="NewsApp" screenOptions={{}}>
+        <Stack.Navigator initialRouteName="Biodata" screenOptions={{}}>
           <Stack.Screen name="NewsApp" component={HomeScreen} />
           <Stack.Screen name="readNews" component={ReadNews} />
           <Stack.Screen name="MiniCard" component={MiniCard} />
+          <Stack.Screen name="Biodata" component={Biodata} />
         </Stack.Navigator>
         <StatusBar style="auto" />
       </NavigationContainer>
